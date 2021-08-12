@@ -134,7 +134,7 @@ def marziliano_method(edges, image):
                         width_right = margin + 1
 
                         edge_widths[row, col] = width_right + width_left
-
+    edge_widths = edge_widths[edge_widths != 0]
     return edge_widths
 
 
@@ -161,12 +161,6 @@ def _calculate_sharpness_metric(image, edges):
 
             if is_edge_block(edges[rows, cols], THRESHOLD):
                 block_widths = marziliano_method(edges[rows, cols], image[rows, cols])
-                # rotate block to simulate column-major boolean indexing
-
-                # edgeWidths postprocessing
-                block_widths = np.rot90(np.flipud(block_widths), 3)
-                block_widths = block_widths[block_widths != 0]
-
                 block_contrast = get_block_contrast(image[rows, cols])
                 block_jnb = get_width_JNB(block_contrast)
 
