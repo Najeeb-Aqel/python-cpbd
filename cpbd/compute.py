@@ -7,6 +7,7 @@ from __future__ import (
     unicode_literals
 )
 
+import os
 from math import atan2, pi
 from sys import argv
 
@@ -198,6 +199,14 @@ def get_width_JNB(block_contrast):
 
 
 if __name__ == '__main__':
-    input_image = imread(argv[1], pilmode='L')
-    sharpness = compute(input_image)
-    print('CPBD sharpness for %s: %f' % (argv[1], sharpness))
+    files = os.listdir(argv[1])
+    from datetime import datetime
+
+    for f in files:
+        print(datetime.now())
+        file_path = os.path.join(argv[1], f)
+        input_image = imread(file_path, pilmode='L')
+        sharpness = compute(input_image)
+        print(F'CPBD sharpness for {f}: {sharpness}')
+
+    print(datetime.now())
