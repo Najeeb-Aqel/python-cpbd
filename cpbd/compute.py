@@ -16,7 +16,7 @@ from skimage.feature import canny
 from imageio import imread
 
 from cpbd.octave import sobel
-
+import time
 
 # threshold to characterize blocks as edge/non-edge blocks
 THRESHOLD = 0.002
@@ -199,14 +199,19 @@ def get_width_JNB(block_contrast):
 
 
 if __name__ == '__main__':
-    files = os.listdir(argv[1])
-    from datetime import datetime
 
-    for f in files:
-        print(datetime.now())
-        file_path = os.path.join(argv[1], f)
+    files = os.listdir(argv[1])
+    report = open("blurReport.csv", "a")
+    report.write("filename , sharpnessScore, elapsedSeconds \n")
+
+    for filename in files:
+        start = time.time()
+        file_path = os.path.join(argv[1], filename)
         input_image = imread(file_path, pilmode='L')
         sharpness = compute(input_image)
-        print(F'CPBD sharpness for {f}: {sharpness}')
+        end = time.time()
 
-    print(datetime.now())
+        report.write(f"{filename} , {sharpness}, {end-start} \n")
+        print(f'CPBD sharpness for {filename}: {sharpness}, elapsedSeconds:{end-start}')
+
+    report.close()
